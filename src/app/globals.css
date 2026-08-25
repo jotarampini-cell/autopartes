@@ -346,13 +346,29 @@ img {
   border-radius: var(--radius-pill);
 }
 
+/* Mobile Search Toggle */
+.appstore-mobile-search-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-squircle-sm);
+  color: var(--ios-label-primary);
+  flex-shrink: 0;
+}
+
+.appstore-mobile-search-btn:hover {
+  background: var(--ios-bg-tertiary);
+}
+
 /* Mobile Menu Toggle & Panel */
 .appstore-mobile-menu-btn {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-squircle-sm);
   color: var(--ios-label-primary);
   flex-shrink: 0;
@@ -360,6 +376,47 @@ img {
 
 .appstore-mobile-menu-btn:hover {
   background: var(--ios-bg-tertiary);
+}
+
+/* Mobile Search Overlay Row */
+.mobile-search-row {
+  padding: 0.5rem 1.25rem;
+  background: var(--ios-bg-secondary);
+  border-top: 1px solid var(--ios-separator);
+  position: relative;
+}
+
+.mobile-search-pill {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid var(--brand-red);
+  border-radius: var(--radius-squircle-sm);
+  padding: 0.55rem 0.85rem;
+  gap: 0.5rem;
+  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.12);
+}
+
+.mobile-search-pill input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: var(--ios-label-primary);
+  width: 100%;
+}
+
+.mobile-search-close {
+  display: flex;
+  color: var(--ios-label-tertiary);
+  flex-shrink: 0;
+}
+
+.mobile-search-results {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  top: calc(100% - 0.15rem);
 }
 
 .appstore-mobile-nav {
@@ -394,16 +451,16 @@ img {
   display: none;
   width: 100%;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.25rem;
+  gap: 0.5rem;
+  padding: 0.4rem 1.25rem;
   background: var(--brand-green-light);
   border-top: 1px solid rgba(30, 142, 62, 0.15);
   text-align: left;
 }
 
 .vehicle-bar-icon {
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--brand-yellow);
   color: var(--brand-black);
@@ -423,6 +480,9 @@ img {
   font-size: 0.75rem;
   color: var(--ios-label-secondary);
   line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vehicle-bar-text strong {
@@ -441,7 +501,7 @@ img {
   }
   .section-faq,
   .section-brands {
-    scroll-margin-top: 140px;
+    scroll-margin-top: 110px;
   }
 }
 
@@ -1987,36 +2047,43 @@ img {
     display: flex;
   }
   .appstore-header-inner {
-    flex-wrap: wrap;
-    height: auto;
-    padding: 0.65rem 0;
-    row-gap: 0.65rem;
+    height: 56px;
+    gap: 0.35rem;
+    justify-content: flex-start;
+  }
+  .appstore-header-inner .appstore-logo {
+    margin-right: auto;
   }
   .appstore-logo {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    gap: 0.4rem;
+  }
+  .appstore-logo-icon {
+    width: 32px;
+    height: 32px;
   }
   .appstore-nav-tabs {
     display: none;
   }
+  .appstore-mobile-search-btn {
+    display: flex;
+  }
   .appstore-mobile-menu-btn {
     display: flex;
-    order: 2;
   }
   .appstore-actions {
-    order: 4;
-    width: 100%;
-    flex-wrap: wrap;
+    gap: 0.4rem;
   }
   .appstore-search-pill {
-    width: 100%;
+    display: none;
   }
   .appstore-garage-pill span,
   .appstore-cart-pill span:not(.appstore-cart-counter) {
-    display: inline;
+    display: none;
   }
   .appstore-garage-pill,
   .appstore-cart-pill {
-    flex: 1;
+    padding: 0.5rem;
     justify-content: center;
   }
   .today-hero-card {

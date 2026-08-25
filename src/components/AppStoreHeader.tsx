@@ -23,7 +23,9 @@ export const AppStoreHeader: React.FC<AppStoreHeaderProps> = ({
   const [matchingProducts, setMatchingProducts] = useState<Product[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -34,6 +36,12 @@ export const AppStoreHeader: React.FC<AppStoreHeaderProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (isMobileSearchOpen) {
+      mobileSearchInputRef.current?.focus();
+    }
+  }, [isMobileSearchOpen]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const q = e.target.value;
@@ -123,6 +131,15 @@ export const AppStoreHeader: React.FC<AppStoreHeaderProps> = ({
           </button>
         </nav>
 
+        {/* Mobile Search Toggle */}
+        <button
+          className="appstore-mobile-search-btn"
+          onClick={() => setIsMobileSearchOpen(open => !open)}
+          aria-label="Buscar"
+        >
+          <Search size={20} />
+        </button>
+
         {/* Mobile Menu Toggle */}
         <button
           className="appstore-mobile-menu-btn"
@@ -201,30 +218,88 @@ export const AppStoreHeader: React.FC<AppStoreHeaderProps> = ({
         </div>
       </div>
 
+      {/* Mobile Search Overlay Row — expands in place of the vehicle bar */}
+      {isMobileSearchOpen && (
+        <div className="mobile-search-row">
+          <div className="mobile-search-pill">
+            <Search size={16} color="#86868b" />
+            <input
+              ref={mobileSearchInputRef}
+              type="text"
+              placeholder="Buscar por OEM o pieza..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            <button
+              className="mobile-search-close"
+              onClick={() => setIsMobileSearchOpen(false)}
+              aria-label="Cerrar búsqueda"
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {(isDropdownOpen || searchQuery.trim().length >= 2) && (
+            <div className="search-results-dropdown mobile-search-results">
+              {matchingProducts.length > 0 ? (
+                <>
+                  <div className="search-res-header">
+                    Sugerencias instantáneas ({matchingProducts.length})
+                  </div>
+                  {matchingProducts.map(p => (
+                    <div
+                      key={p.id}
+                      className="search-res-item"
+                      onClick={() => {
+                        handleSelectProduct(p);
+                        setIsMobileSearchOpen(false);
+                      }}
+                    >
+                      <img src={p.image} alt={p.name} className="search-res-thumb" />
+                      <div className="search-res-meta">
+                        <div className="search-res-title">{p.name}</div>
+                        <div className="search-res-sku">{p.brand} · OEM: {p.oemNumber}</div>
+                      </div>
+                      <div className="search-res-price">${p.price.toFixed(2)}</div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <div style={{ padding: '1.25rem', textAlign: 'center', color: '#86868b', fontSize: '0.8125rem' }}>
+                  No se encontraron repuestos para &quot;<strong>{searchQuery}</strong>&quot;
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Persistent Vehicle Bar (mobile) — keeps fitment context always visible */}
-      <button className="vehicle-bar" onClick={() => setIsGarageModalOpen(true)}>
-        {activeVehicle ? (
-          <>
-            <span className="vehicle-bar-icon active">
-              <Car size={15} />
-            </span>
-            <span className="vehicle-bar-text">
-              Mostrando piezas para <strong>{activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</strong>
-            </span>
-            <ChevronDown size={15} className="vehicle-bar-chevron" />
-          </>
-        ) : (
-          <>
-            <span className="vehicle-bar-icon">
-              <Plus size={15} />
-            </span>
-            <span className="vehicle-bar-text">
-              <strong>Selecciona tu vehículo</strong> para ver piezas 100% compatibles
-            </span>
-            <ChevronDown size={15} className="vehicle-bar-chevron" />
-          </>
-        )}
-      </button>
+      {!isMobileSearchOpen && (
+        <button className="vehicle-bar" onClick={() => setIsGarageModalOpen(true)}>
+          {activeVehicle ? (
+            <>
+              <span className="vehicle-bar-icon active">
+                <Car size={13} />
+              </span>
+              <span className="vehicle-bar-text">
+                <strong>{activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</strong>
+              </span>
+              <ChevronDown size={14} className="vehicle-bar-chevron" />
+            </>
+          ) : (
+            <>
+              <span className="vehicle-bar-icon">
+                <Plus size={13} />
+              </span>
+              <span className="vehicle-bar-text">
+                <strong>Selecciona tu vehículo</strong> para ver piezas compatibles
+              </span>
+              <ChevronDown size={14} className="vehicle-bar-chevron" />
+            </>
+          )}
+        </button>
+      )}
 
       {/* Mobile Nav Panel */}
       {isMobileMenuOpen && (

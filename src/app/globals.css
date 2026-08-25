@@ -84,6 +84,7 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   background-color: var(--ios-bg);
+  overflow-x: hidden;
 }
 
 body {
@@ -92,7 +93,6 @@ body {
   color: var(--ios-label-primary);
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 a {

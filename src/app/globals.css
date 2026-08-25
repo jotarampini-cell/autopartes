@@ -439,6 +439,10 @@ img {
   .vehicle-bar {
     display: flex;
   }
+  .section-faq,
+  .section-brands {
+    scroll-margin-top: 140px;
+  }
 }
 
 /* ==========================================================================
@@ -1740,42 +1744,6 @@ img {
   to { transform: scale(1); opacity: 1; }
 }
 
-@media (max-width: 640px) {
-  .appstore-sheet-backdrop {
-    align-items: flex-end;
-    padding: 0;
-  }
-  .appstore-detail-modal {
-    max-width: 100%;
-    max-height: 92vh;
-    border-radius: 16px 16px 0 0;
-    animation: slideUpSheet 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  .appstore-modal-header-hero {
-    padding: 1.5rem 1.25rem 1.25rem;
-    gap: 0.85rem;
-    align-items: flex-start;
-  }
-  .appstore-modal-app-icon {
-    width: 64px;
-    height: 64px;
-  }
-  .appstore-modal-title {
-    font-size: 1.35rem;
-  }
-  .appstore-stat-bar {
-    padding: 1rem 1.25rem;
-  }
-  .appstore-modal-body {
-    padding: 1.5rem 1.25rem;
-  }
-  .fitment-guarantee-line {
-    padding: 0.5rem 1.25rem 0;
-  }
-  .appstore-modal-sticky-footer {
-    padding: 0.75rem 1.25rem calc(1rem + env(safe-area-inset-bottom, 0px));
-  }
-}
 
 .appstore-modal-header-hero {
   padding: 2.5rem 2.5rem 1.5rem;
@@ -1915,6 +1883,44 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+  .appstore-sheet-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .appstore-detail-modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+    animation: slideUpSheet 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .appstore-modal-header-hero {
+    padding: 1.5rem 1.25rem 1.25rem;
+    gap: 0.85rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .appstore-modal-app-icon {
+    width: 64px;
+    height: 64px;
+  }
+  .appstore-modal-title {
+    font-size: 1.35rem;
+  }
+  .appstore-stat-bar {
+    padding: 1rem 1.25rem;
+  }
+  .appstore-modal-body {
+    padding: 1.5rem 1.25rem;
+  }
+  .fitment-guarantee-line {
+    padding: 0.5rem 1.25rem 0;
+  }
+  .appstore-modal-sticky-footer {
+    padding: 0.75rem 1.25rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ==========================================================================
@@ -2279,6 +2285,7 @@ img {
   background: var(--ios-bg-secondary);
   border-top: 1px solid var(--ios-separator);
   border-bottom: 1px solid var(--ios-separator);
+  scroll-margin-top: 90px;
 }
 
 .brands-grid {
@@ -2332,6 +2339,7 @@ img {
 .section-faq {
   padding: 4rem 0;
   background: var(--ios-bg);
+  scroll-margin-top: 90px;
 }
 
 .faq-container {
@@ -2913,6 +2921,22 @@ img {
 .saved-vehicle-card:hover {
   border-color: var(--brand-red);
   background: var(--brand-red-light);
+}
+
+.garage-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  color: var(--ios-label-secondary);
+  font-size: 0.875rem;
+}
+
+.garage-empty-state .btn-ios-apply-fitment {
+  width: auto;
+  padding: 0.65rem 1.5rem;
 }
 
 .saved-vehicle-card.active {

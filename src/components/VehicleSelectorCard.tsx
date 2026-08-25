@@ -39,7 +39,7 @@ export const VehicleSelectorCard: React.FC = () => {
   };
 
   return (
-    <div className="today-fitment-card">
+    <div className="today-fitment-card" id="fitment-selector-card">
       <div className="fitment-card-top">
         <div>
           <h3 className="fitment-card-title">Configura tu Garaje</h3>

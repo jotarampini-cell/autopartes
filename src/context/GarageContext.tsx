@@ -18,9 +18,7 @@ const GarageContext = createContext<GarageContextType | undefined>(undefined);
 
 export function GarageProvider({ children }: { children: React.ReactNode }) {
   const [activeVehicle, setActiveVehicleState] = useState<VehicleSelection | null>(null);
-  const [savedVehicles, setSavedVehicles] = useState<VehicleSelection[]>([
-    { year: 2022, make: "Toyota", model: "Hilux", engine: "2.8L Turbo Diesel (1GD-FTV)" }
-  ]);
+  const [savedVehicles, setSavedVehicles] = useState<VehicleSelection[]>([]);
   const [isGarageModalOpen, setIsGarageModalOpen] = useState(false);
 
   useEffect(() => {

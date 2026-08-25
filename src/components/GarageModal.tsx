@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, Check } from 'lucide-react';
+import { X, Check, Car } from 'lucide-react';
 import { useGarage } from '@/context/GarageContext';
 import { useCart } from '@/context/CartContext';
 import { VehicleSelection } from '@/data/autoparts-data';
@@ -22,6 +22,11 @@ export const GarageModal: React.FC = () => {
     setActiveVehicle(v);
     setIsGarageModalOpen(false);
     showToast(`Vehículo activo: ${v.year} ${v.make} ${v.model}`, 'success');
+  };
+
+  const handleGoToSelector = () => {
+    setIsGarageModalOpen(false);
+    document.getElementById('fitment-selector-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   return (
@@ -47,6 +52,15 @@ export const GarageModal: React.FC = () => {
         </p>
 
         <div className="saved-vehicles-list">
+          {savedVehicles.length === 0 && (
+            <div className="garage-empty-state">
+              <Car size={40} stroke="#cbd5e1" />
+              <p>Aún no tienes vehículos guardados.</p>
+              <button className="btn-ios-apply-fitment" onClick={handleGoToSelector}>
+                Agregar mi Vehículo
+              </button>
+            </div>
+          )}
           {savedVehicles.map((v, i) => {
             const isActive =
               activeVehicle &&

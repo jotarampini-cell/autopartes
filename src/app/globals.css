@@ -786,9 +786,29 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.today-action-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.today-action-price-now {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.today-action-price-was {
+  font-size: 0.75rem;
+  color: #a7abb3;
+  text-decoration: line-through;
 }
 
 .appstore-get-btn {
@@ -848,6 +868,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .fitment-card-icon-badge {
@@ -970,120 +991,34 @@ img {
   text-decoration: underline;
 }
 
-/* 3-Column Ranked Top Charts Grid */
-.top-charts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.top-chart-col {
-  background: var(--ios-bg-secondary);
-  border-radius: var(--radius-squircle-lg);
-  padding: 1rem;
-  box-shadow: var(--shadow-ios-card);
-  border: 1px solid var(--ios-separator);
+/* Horizontal Scrollable Rail — Best Sellers */
+.top-charts-rail {
   display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: hidden;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
 }
 
-.top-chart-item {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.85rem 0.75rem;
-  border-radius: var(--radius-squircle-sm);
-  transition: var(--spring-transition);
-  cursor: pointer;
+.top-charts-rail::-webkit-scrollbar {
+  display: none;
 }
 
-.top-chart-item + .top-chart-item {
-  border-top: 1px solid var(--ios-separator-light);
+.top-charts-rail-item {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
 }
 
-.top-chart-item:hover {
-  background: var(--brand-red-light);
+.top-charts-rail-item .app-product-card {
+  height: 100%;
 }
 
-.top-chart-rank {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--ios-label-quaternary);
-  width: 26px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-/* Highlight top 3 ranks */
-.top-chart-col:first-child .top-chart-item:nth-child(1) .top-chart-rank {
-  color: var(--brand-red);
-  font-size: 1.75rem;
-}
-
-.top-chart-col:first-child .top-chart-item:nth-child(2) .top-chart-rank {
-  color: var(--brand-red);
-}
-
-.top-chart-col:first-child .top-chart-item:nth-child(3) .top-chart-rank {
-  color: var(--brand-yellow-dark);
-}
-
-/* Product Thumbnail */
-.app-squircle-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-squircle-sm);
-  object-fit: cover;
-  background: var(--ios-bg-tertiary);
-  box-shadow: none;
-  border: 1px solid var(--ios-separator-light);
-  flex-shrink: 0;
-  transition: var(--spring-transition);
-}
-
-.top-chart-item:hover .app-squircle-icon {
-  border-color: var(--brand-red);
-}
-
-.top-chart-info {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.top-chart-name {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.9375rem;
-  color: var(--ios-label-primary);
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.top-chart-brand {
-  font-size: 0.6875rem;
-  color: var(--ios-label-tertiary);
-  margin-top: 0.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.top-chart-price {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--brand-red);
-  margin-top: 0.25rem;
+@media (max-width: 640px) {
+  .top-charts-rail-item {
+    flex-basis: 72vw;
+    max-width: 300px;
+  }
 }
 
 /* In-App Action Button */
@@ -1680,6 +1615,20 @@ img {
   border-radius: var(--radius-squircle-sm);
 }
 
+.app-card-rank-pill {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  background: var(--brand-black);
+  color: var(--brand-yellow);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 800;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-squircle-sm);
+  letter-spacing: 0.01em;
+}
+
 /* Compatibility Pill */
 .app-fit-pill {
   display: inline-flex;
@@ -2018,12 +1967,6 @@ img {
   .today-cards-grid {
     grid-template-columns: 1fr;
   }
-  .top-charts-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .top-chart-col:last-child {
-    display: none;
-  }
   .curated-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2039,12 +1982,6 @@ img {
   .curated-cards-grid,
   .app-products-grid {
     grid-template-columns: 1fr;
-  }
-  .top-charts-grid {
-    grid-template-columns: 1fr;
-  }
-  .top-chart-col:last-child {
-    display: flex;
   }
   .appstore-header-inner {
     height: 56px;

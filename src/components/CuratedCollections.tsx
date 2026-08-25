@@ -14,8 +14,7 @@ export const CuratedCollections: React.FC<CuratedCollectionsProps> = ({ onSelect
       <div className="container">
         <div className="section-app-header">
           <div>
-            <h2 className="section-app-title">Colecciones Destacadas</h2>
-            <p className="section-app-subtitle">Explora kits y sistemas seleccionados por expertos</p>
+            <h2 className="section-app-title">Comprar por Categoría</h2>
           </div>
           <button
             className="section-app-link"

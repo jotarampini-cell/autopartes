@@ -39,20 +39,18 @@ export const TodayHeroStory: React.FC<TodayHeroStoryProps> = ({ onExploreCatalog
             <div className="today-card-scrim"></div>
 
             <div className="today-card-content">
-              <span className="today-card-tag">SELECCIÓN EDITORIAL</span>
+              <span className="today-card-tag">OFERTA DESTACADA</span>
               <h2 className="today-card-headline">
-                Brembo X-Line: La Máxima Evolución en Frenado de Precisión
+                Discos Brembo X-Line
               </h2>
               <p className="today-card-subhead">
-                Discos perforados con aleación con alto contenido de carbono para disipación térmica y control absoluto en cualquier condición.
+                Frenado de precisión con disipación térmica superior.
               </p>
 
               <div className="today-action-bar" onClick={e => e.stopPropagation()}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>$189.99</span>
-                  <span style={{ fontSize: '0.75rem', color: '#a7abb3', textDecoration: 'line-through' }}>
-                    $229.99
-                  </span>
+                <div className="today-action-price">
+                  <span className="today-action-price-now">$189.99</span>
+                  <span className="today-action-price-was">$229.99</span>
                 </div>
                 <button
                   className="appstore-get-btn"

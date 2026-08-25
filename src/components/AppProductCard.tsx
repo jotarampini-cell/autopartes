@@ -8,9 +8,10 @@ import { useCart } from '@/context/CartContext';
 
 interface AppProductCardProps {
   product: Product;
+  rank?: number;
 }
 
-export const AppProductCard: React.FC<AppProductCardProps> = ({ product }) => {
+export const AppProductCard: React.FC<AppProductCardProps> = ({ product, rank }) => {
   const { activeVehicle, checkFitment } = useGarage();
   const { addToCart, setSelectedQuickViewProduct } = useCart();
 
@@ -24,7 +25,11 @@ export const AppProductCard: React.FC<AppProductCardProps> = ({ product }) => {
     >
       <div className="app-card-thumb-wrapper">
         <img src={product.image} alt={product.name} loading="lazy" />
-        {product.badge && <span className="app-card-badge-pill">{product.badge}</span>}
+        {rank ? (
+          <span className="app-card-rank-pill">#{rank}</span>
+        ) : (
+          product.badge && <span className="app-card-badge-pill">{product.badge}</span>
+        )}
       </div>
 
       {/* Fitment indicator */}

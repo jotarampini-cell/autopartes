@@ -1,0 +1,74 @@
+'use client';
+
+import React from 'react';
+import { CheckCircle2, AlertTriangle, HelpCircle } from 'lucide-react';
+import { Product } from '@/data/autoparts-data';
+import { useGarage } from '@/context/GarageContext';
+import { useCart } from '@/context/CartContext';
+
+interface AppProductCardProps {
+  product: Product;
+}
+
+export const AppProductCard: React.FC<AppProductCardProps> = ({ product }) => {
+  const { activeVehicle, checkFitment } = useGarage();
+  const { addToCart, setSelectedQuickViewProduct } = useCart();
+
+  const fitStatus = checkFitment(product);
+
+  return (
+    <div
+      className="app-product-card"
+      onClick={() => setSelectedQuickViewProduct(product)}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className="app-card-thumb-wrapper">
+        <img src={product.image} alt={product.name} loading="lazy" />
+        {product.badge && <span className="app-card-badge-pill">{product.badge}</span>}
+      </div>
+
+      {/* Fitment indicator */}
+      {activeVehicle ? (
+        fitStatus === 'compatible' ? (
+          <span className="app-fit-pill compatible">
+            <CheckCircle2 size={12} /> Compatible con tu {activeVehicle.model}
+          </span>
+        ) : (
+          <span className="app-fit-pill incompatible">
+            <AlertTriangle size={12} /> No compatible con tu {activeVehicle.model}
+          </span>
+        )
+      ) : (
+        <span className="app-fit-pill unknown">
+          <HelpCircle size={12} /> Selecciona tu vehículo para confirmar ajuste
+        </span>
+      )}
+
+      <div className="app-card-brand">{product.brand}</div>
+      <h4 className="app-card-name" title={product.name}>
+        {product.name}
+      </h4>
+      <div className="app-card-oem">OEM: {product.oemNumber}</div>
+
+      <div className="app-card-rating-row">
+        <span>★ {product.rating}</span>
+        <span style={{ color: '#86868b' }}>({product.reviewsCount})</span>
+      </div>
+
+      <div className="app-card-footer" onClick={e => e.stopPropagation()}>
+        <div>
+          <span className="app-card-price">${product.price.toFixed(2)}</span>
+          {product.originalPrice && (
+            <span className="app-card-orig-price">${product.originalPrice.toFixed(2)}</span>
+          )}
+        </div>
+        <button
+          className="btn-app-get"
+          onClick={() => addToCart(product.id)}
+        >
+          AGREGAR
+        </button>
+      </div>
+    </div>
+  );
+};

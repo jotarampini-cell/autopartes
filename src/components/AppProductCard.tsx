@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle2, AlertTriangle, HelpCircle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, HelpCircle, Star } from 'lucide-react';
 import { Product } from '@/data/autoparts-data';
 import { useGarage } from '@/context/GarageContext';
 import { useCart } from '@/context/CartContext';
@@ -56,8 +56,18 @@ export const AppProductCard: React.FC<AppProductCardProps> = ({ product, rank })
       <div className="app-card-oem">OEM: {product.oemNumber}</div>
 
       <div className="app-card-rating-row">
-        <span>★ {product.rating}</span>
-        <span style={{ color: '#86868b' }}>({product.reviewsCount})</span>
+        <span className="app-card-stars">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              size={12}
+              fill={i < Math.round(product.rating) ? 'currentColor' : 'none'}
+              strokeWidth={i < Math.round(product.rating) ? 0 : 1.5}
+            />
+          ))}
+        </span>
+        <span className="app-card-rating-value">{product.rating}</span>
+        <span className="app-card-rating-count">({product.reviewsCount})</span>
       </div>
 
       <div className="app-card-footer" onClick={e => e.stopPropagation()}>

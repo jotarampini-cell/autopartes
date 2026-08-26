@@ -52,7 +52,7 @@
   /* Shadows */
   --shadow-ios-card: 0 1px 2px rgba(15, 17, 20, 0.06), 0 2px 8px -2px rgba(15, 17, 20, 0.06);
   --shadow-ios-card-hover: 0 8px 20px -6px rgba(15, 17, 20, 0.16), 0 2px 8px -2px rgba(15, 17, 20, 0.08);
-  --shadow-ios-hero: 0 20px 40px -14px rgba(0, 0, 0, 0.35);
+  --shadow-ios-hero: 0 24px 48px -16px rgba(0, 0, 0, 0.4), 0 8px 20px -8px rgba(227, 18, 31, 0.18);
   --shadow-ios-modal: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
 
   /* Geometry & Radius — sharper, technical, not soft/squircle */
@@ -621,7 +621,8 @@ img {
   width: 40px;
   height: 40px;
   border-radius: var(--radius-squircle-sm);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 184, 0, 0.1);
+  border: 1px solid rgba(255, 184, 0, 0.2);
   color: var(--brand-yellow);
   display: flex;
   align-items: center;
@@ -941,10 +942,13 @@ img {
   justify-content: center;
   gap: 0.5rem;
   transition: var(--spring-transition);
+  box-shadow: 0 4px 14px rgba(227, 18, 31, 0.3);
 }
 
 .btn-ios-apply-fitment:hover {
   background: var(--brand-red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(227, 18, 31, 0.4);
 }
 
 /* ==========================================================================
@@ -1023,21 +1027,28 @@ img {
 
 /* In-App Action Button */
 .btn-app-get {
-  background: var(--brand-black);
+  background: var(--brand-red);
   color: #fff;
   font-weight: 800;
   font-size: 0.6875rem;
-  padding: 0.45rem 0.85rem;
+  padding: 0.55rem 1rem;
   border-radius: var(--radius-squircle-sm);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: var(--spring-transition);
   flex-shrink: 0;
   white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(227, 18, 31, 0.28);
 }
 
 .btn-app-get:hover {
-  background: var(--brand-red);
+  background: var(--brand-red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(227, 18, 31, 0.38);
+}
+
+.btn-app-get:active {
+  transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -1613,6 +1624,7 @@ img {
   text-transform: uppercase;
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-squircle-sm);
+  box-shadow: 0 2px 8px rgba(227, 18, 31, 0.3);
 }
 
 .app-card-rank-pill {
@@ -1627,6 +1639,7 @@ img {
   padding: 0.15rem 0.6rem;
   border-radius: var(--radius-squircle-sm);
   letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Compatibility Pill */
@@ -1694,8 +1707,23 @@ img {
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  color: var(--brand-yellow-dark);
   margin-bottom: 1rem;
+}
+
+.app-card-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  color: var(--brand-yellow-dark);
+}
+
+.app-card-rating-value {
+  font-weight: 700;
+  color: var(--ios-label-primary);
+}
+
+.app-card-rating-count {
+  color: var(--ios-label-tertiary);
 }
 
 .app-card-footer {

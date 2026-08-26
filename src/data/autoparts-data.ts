@@ -60,6 +60,21 @@ export interface FaqItem {
   a: string;
 }
 
+export interface PromoSlide {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  subhead: string;
+  ctaText: string;
+  categoryId: string;
+  image: string;
+}
+
+export interface LinkColumn {
+  title: string;
+  links: { label: string; categoryId?: string }[];
+}
+
 export const VEHICLE_DB = {
   years: [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015],
   makes: {
@@ -608,5 +623,91 @@ export const FAQS: FaqItem[] = [
   {
     q: "¿Puedo guardar múltiples vehículos en mi perfil?",
     a: "¡Sí! Puedes registrar varios automóviles, camionetas o motos en 'Mi Garaje' y alternar entre ellos con un solo clic para comprar refacciones de toda tu flota familiar o de trabajo."
+  }
+];
+
+export const PROMO_SLIDES: PromoSlide[] = [
+  {
+    id: "promo-frenos",
+    eyebrow: "Ahorra hasta 25%",
+    headline: "Kits de freno completos",
+    subhead: "Discos ventilados y pastillas cerámicas con envío gratis desde $99.",
+    ctaText: "Ver frenos",
+    categoryId: "frenos",
+    image: "https://images.unsplash.com/photo-1613214150384-14921ff659b2?auto=format&fit=crop&w=1600&q=85"
+  },
+  {
+    id: "promo-baterias",
+    eyebrow: "Listo para el camino",
+    headline: "Baterías AGM desde $129",
+    subhead: "Arranque garantizado en frío con 3 años de cobertura total.",
+    ctaText: "Ver baterías",
+    categoryId: "electrico",
+    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1600&q=85"
+  },
+  {
+    id: "promo-suspension",
+    eyebrow: "Manejo firme",
+    headline: "Amortiguadores a gas monotubo",
+    subhead: "Kits KYB y Bilstein para pickup, SUV y off-road.",
+    ctaText: "Ver suspensión",
+    categoryId: "suspension",
+    image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=85"
+  },
+  {
+    id: "promo-filtros",
+    eyebrow: "Mantenimiento al día",
+    headline: "Filtros y aceite sintético",
+    subhead: "Todo lo necesario para tu próximo servicio en un solo pedido.",
+    ctaText: "Ver filtros",
+    categoryId: "filtros",
+    image: "https://images.unsplash.com/photo-1577762616603-0be18aaca637?auto=format&fit=crop&w=1600&q=85"
+  }
+];
+
+export const POPULAR_LINK_COLUMNS: LinkColumn[] = [
+  {
+    title: "Marcas populares",
+    links: [
+      { label: "Repuestos Brembo" },
+      { label: "Repuestos Bosch" },
+      { label: "Repuestos ACDelco" },
+      { label: "Repuestos KYB" },
+      { label: "Repuestos Denso" },
+      { label: "Repuestos Gates" }
+    ]
+  },
+  {
+    title: "Modelos populares",
+    links: [
+      { label: "Refacciones Toyota Hilux" },
+      { label: "Refacciones Ford F-150" },
+      { label: "Refacciones Chevrolet Silverado" },
+      { label: "Refacciones Honda Civic" },
+      { label: "Refacciones Nissan Frontier" },
+      { label: "Refacciones Jeep Wrangler" }
+    ]
+  },
+  {
+    title: "Categorías más buscadas",
+    links: [
+      { label: "Pastillas y discos de freno", categoryId: "frenos" },
+      { label: "Baterías y alternadores", categoryId: "electrico" },
+      { label: "Amortiguadores y espirales", categoryId: "suspension" },
+      { label: "Kits de distribución", categoryId: "motor" },
+      { label: "Filtros de aire y aceite", categoryId: "filtros" },
+      { label: "Faros y luces LED", categoryId: "iluminacion" }
+    ]
+  },
+  {
+    title: "Guías y consejos",
+    links: [
+      { label: "¿Cuándo cambiar las pastillas de freno?" },
+      { label: "Señales de una batería agotada" },
+      { label: "Cómo elegir amortiguadores" },
+      { label: "Cada cuánto cambiar el aceite" },
+      { label: "Qué significa la luz del motor" },
+      { label: "Guía de filtros de aire" }
+    ]
   }
 ];

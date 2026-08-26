@@ -2,14 +2,15 @@
 
 import React, { useState } from 'react';
 import { AppStoreHeader } from '@/components/AppStoreHeader';
-import { QuickCategoriesBar } from '@/components/QuickCategoriesBar';
-import { TodayHeroStory } from '@/components/TodayHeroStory';
+import { HeroCarousel } from '@/components/HeroCarousel';
+import { CategoryShortcutRow } from '@/components/CategoryShortcutRow';
+import { VehicleFitmentStrip } from '@/components/VehicleFitmentStrip';
 import { TrustBar } from '@/components/TrustBar';
-import { TopChartsSection } from '@/components/TopChartsSection';
-import { CuratedCollections } from '@/components/CuratedCollections';
+import { FeaturedProductsGrid } from '@/components/FeaturedProductsGrid';
 import { AppCatalogSection } from '@/components/AppCatalogSection';
-import { LifestyleSection } from '@/components/LifestyleSection';
 import { BrandWall } from '@/components/BrandWall';
+import { PopularLinksSection } from '@/components/PopularLinksSection';
+import { NewsletterSignup } from '@/components/NewsletterSignup';
 import { FaqAccordion } from '@/components/FaqAccordion';
 
 export default function HomePage() {
@@ -41,43 +42,45 @@ export default function HomePage() {
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--ios-bg)' }}>
-      {/* App Store Frosted Glass Header */}
       <AppStoreHeader
         activeTab={activeTab}
         onTabChange={handleTabChange}
         onSearchChange={q => setSearchQuery(q)}
       />
 
-      {/* Quick Category Shortcuts */}
-      <QuickCategoriesBar onSelectCategory={handleCategorySelect} />
+      {/* 1. Promotional hero carousel */}
+      <HeroCarousel onSelectCategory={handleCategorySelect} />
 
-      {/* Hero Offer + Vehicle Fitment Widget */}
-      <TodayHeroStory onExploreCatalog={handleExploreCatalog} />
+      {/* 2. Vehicle fitment selector — the core utility of a parts store */}
+      <VehicleFitmentStrip />
 
-      {/* Shipping / Warranty / Returns / Support */}
+      {/* 3. Category shortcut row */}
+      <CategoryShortcutRow onSelectCategory={handleCategorySelect} />
+
+      {/* 4. Service / value band */}
       <TrustBar />
 
-      {/* "Top Repuestos Más Populares" - Numbered Top Charts Ranking */}
-      <TopChartsSection onSeeAll={handleExploreCatalog} />
+      {/* 5. Featured product grid */}
+      <FeaturedProductsGrid onSeeAll={handleExploreCatalog} />
 
-      {/* "Colecciones Curadas" - Horizontal Systems Grid */}
-      <CuratedCollections onSelectCategory={handleCategorySelect} />
-
-      {/* App Store Catalog Explorer */}
+      {/* 6. Full catalog with filters */}
       <AppCatalogSection
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
         searchQuery={searchQuery}
       />
 
-      {/* Segments by Vehicle Lifestyle */}
-      <LifestyleSection />
-
-      {/* Certified Brand Wall */}
+      {/* 7. Certified brands */}
       <BrandWall />
 
-      {/* Customer FAQs */}
+      {/* 8. Popular link columns */}
+      <PopularLinksSection onSelectCategory={handleCategorySelect} />
+
+      {/* 9. FAQ */}
       <FaqAccordion />
+
+      {/* 10. Newsletter */}
+      <NewsletterSignup />
     </main>
   );
 }

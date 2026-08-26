@@ -506,6 +506,600 @@ img {
 }
 
 /* ==========================================================================
+   Hero Promotional Carousel
+   ========================================================================== */
+.hero-carousel {
+  padding: 1.25rem 0 0;
+  background: var(--ios-bg);
+}
+
+.hero-carousel-frame {
+  position: relative;
+  height: 380px;
+  border-radius: var(--radius-squircle-md);
+  overflow: hidden;
+  background: var(--brand-black);
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-slide-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(15, 17, 20, 0.92) 0%, rgba(15, 17, 20, 0.75) 45%, rgba(15, 17, 20, 0.15) 100%);
+}
+
+.hero-slide-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2.5rem 3rem;
+  max-width: 620px;
+  color: #fff;
+}
+
+.hero-slide-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  background: var(--brand-yellow);
+  color: var(--brand-black);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-squircle-sm);
+}
+
+.hero-slide-headline {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.hero-slide-subhead {
+  font-size: 1rem;
+  color: #d4d7dd;
+  line-height: 1.45;
+  max-width: 440px;
+}
+
+.hero-slide-cta {
+  margin-top: 0.6rem;
+  width: fit-content;
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.8rem 1.75rem;
+  border-radius: var(--radius-squircle-sm);
+  transition: var(--fast-transition);
+}
+
+.hero-slide-cta:hover {
+  background: var(--brand-red-dark);
+}
+
+.hero-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--brand-black);
+  border-radius: 50%;
+  transition: var(--fast-transition);
+}
+
+.hero-nav:hover {
+  background: #fff;
+}
+
+.hero-nav.prev { left: 1rem; }
+.hero-nav.next { right: 1rem; }
+
+.hero-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.hero-dot {
+  width: 28px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  transition: var(--fast-transition);
+}
+
+.hero-dot.active {
+  background: var(--brand-red);
+}
+
+@media (max-width: 900px) {
+  .hero-carousel-frame { height: 320px; }
+  .hero-slide-content { padding: 2rem; }
+  .hero-slide-headline { font-size: 2.1rem; }
+  .hero-slide-subhead { font-size: 0.9375rem; }
+}
+
+@media (max-width: 640px) {
+  .hero-carousel-frame { height: 300px; }
+  .hero-slide-scrim {
+    background: linear-gradient(180deg, rgba(15,17,20,0.55) 0%, rgba(15,17,20,0.9) 100%);
+  }
+  .hero-slide-content { padding: 1.5rem; justify-content: flex-end; padding-bottom: 2.5rem; }
+  .hero-slide-headline { font-size: 1.75rem; }
+  .hero-nav { display: none; }
+}
+
+/* ==========================================================================
+   Vehicle Fitment Strip — Primary Utility
+   ========================================================================== */
+.fitment-strip {
+  background: var(--brand-black);
+  padding: 1.25rem 0;
+  border-bottom: 3px solid var(--brand-red);
+}
+
+.fitment-strip-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.fitment-strip-intro {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: #fff;
+}
+
+.fitment-strip-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: var(--radius-squircle-sm);
+  background: var(--brand-red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fitment-strip-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.fitment-strip-desc {
+  font-size: 0.8125rem;
+  color: #a7abb3;
+  margin-top: 0.1rem;
+}
+
+.fitment-strip-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.fitment-select {
+  background: #24272f;
+  border: 1.5px solid #363a44;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-squircle-sm);
+  min-width: 120px;
+  flex: 1 1 120px;
+  max-width: 190px;
+  cursor: pointer;
+  outline: none;
+  transition: var(--fast-transition);
+}
+
+.fitment-select:focus {
+  border-color: var(--brand-red);
+}
+
+.fitment-select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fitment-apply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radius-squircle-sm);
+  white-space: nowrap;
+  transition: var(--fast-transition);
+}
+
+.fitment-apply-btn:hover {
+  background: var(--brand-red-dark);
+}
+
+.fitment-active-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.fitment-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  color: #fff;
+}
+
+.fitment-active-badge svg {
+  color: var(--brand-green);
+}
+
+.fitment-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--brand-yellow);
+}
+
+@media (max-width: 900px) {
+  .fitment-strip-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .fitment-strip-fields {
+    justify-content: stretch;
+  }
+  .fitment-select {
+    max-width: none;
+    flex: 1 1 calc(50% - 0.25rem);
+  }
+  .fitment-apply-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Category Shortcut Row
+   ========================================================================== */
+.shortcut-section {
+  background: var(--ios-bg-secondary);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--ios-separator);
+}
+
+.shortcut-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.75rem;
+}
+
+.shortcut-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--ios-separator);
+  border-radius: var(--radius-squircle-sm);
+  background: var(--ios-bg-secondary);
+  text-align: center;
+  transition: var(--fast-transition);
+}
+
+.shortcut-tile:hover {
+  border-color: var(--brand-red);
+  background: var(--brand-red-light);
+}
+
+.shortcut-icon {
+  color: var(--brand-red);
+  display: flex;
+}
+
+.shortcut-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ios-label-primary);
+  line-height: 1.25;
+}
+
+.shortcut-cta {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--brand-red);
+}
+
+@media (max-width: 1024px) {
+  .shortcut-row { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .shortcut-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==========================================================================
+   Featured Products Grid
+   ========================================================================== */
+.featured-section {
+  padding: 2.5rem 0;
+  scroll-margin-top: 90px;
+}
+
+.featured-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.featured-title {
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ios-label-primary);
+  line-height: 1;
+}
+
+.featured-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--brand-red);
+  white-space: nowrap;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .featured-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .featured-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 460px) {
+  .featured-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Popular Link Columns
+   ========================================================================== */
+.popular-links-section {
+  background: var(--ios-bg-secondary);
+  padding: 3rem 0;
+  border-top: 1px solid var(--ios-separator);
+}
+
+.popular-links-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.popular-links-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ios-label-primary);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--brand-red);
+}
+
+.popular-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popular-link {
+  font-size: 0.8125rem;
+  color: var(--ios-label-secondary);
+  text-align: left;
+  line-height: 1.4;
+  transition: var(--fast-transition);
+}
+
+.popular-link:hover {
+  color: var(--brand-red);
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .popular-links-grid { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
+}
+
+@media (max-width: 520px) {
+  .popular-links-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   Newsletter Signup
+   ========================================================================== */
+.newsletter-section {
+  background: var(--brand-black);
+  padding: 2.5rem 0;
+}
+
+.newsletter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.newsletter-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.newsletter-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: var(--radius-squircle-sm);
+  background: rgba(255, 184, 0, 0.12);
+  border: 1px solid rgba(255, 184, 0, 0.25);
+  color: var(--brand-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.newsletter-desc {
+  font-size: 0.8125rem;
+  color: #a7abb3;
+  margin-top: 0.15rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  max-width: 460px;
+  min-width: 280px;
+}
+
+.newsletter-input {
+  flex: 1;
+  min-width: 0;
+  background: #24272f;
+  border: 1.5px solid #363a44;
+  color: #fff;
+  font-size: 0.875rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-squircle-sm);
+  outline: none;
+  transition: var(--fast-transition);
+}
+
+.newsletter-input::placeholder {
+  color: #767b85;
+}
+
+.newsletter-input:focus {
+  border-color: var(--brand-red);
+}
+
+.newsletter-btn {
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-squircle-sm);
+  white-space: nowrap;
+  transition: var(--fast-transition);
+}
+
+.newsletter-btn:hover {
+  background: var(--brand-red-dark);
+}
+
+@media (max-width: 640px) {
+  .newsletter-form { max-width: none; width: 100%; }
+}
+
+/* ==========================================================================
    Quick Categories Bar — Scannable Icon Shortcuts (Post-Header)
    ========================================================================== */
 .quickcats-section {
@@ -830,7 +1424,6 @@ img {
 
 .appstore-get-btn:hover {
   background: var(--brand-red-dark);
-  transform: translateY(-1px);
 }
 
 .appstore-get-btn.secondary {
@@ -947,8 +1540,6 @@ img {
 
 .btn-ios-apply-fitment:hover {
   background: var(--brand-red-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(227, 18, 31, 0.4);
 }
 
 /* ==========================================================================
@@ -1043,12 +1634,6 @@ img {
 
 .btn-app-get:hover {
   background: var(--brand-red-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(227, 18, 31, 0.38);
-}
-
-.btn-app-get:active {
-  transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -1077,8 +1662,6 @@ img {
 }
 
 .curated-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-ios-card-hover);
   border-color: var(--brand-red);
 }
 
@@ -1566,20 +2149,18 @@ img {
 
 .app-product-card {
   background: var(--ios-bg-secondary);
-  border-radius: var(--radius-squircle-lg);
+  border-radius: var(--radius-squircle-sm);
   border: 1px solid var(--ios-separator);
-  padding: 1.25rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-ios-card);
-  transition: var(--spring-transition);
+  transition: var(--fast-transition);
   position: relative;
 }
 
 .app-product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-ios-card-hover);
   border-color: var(--brand-red);
+  box-shadow: 0 0 0 1px var(--brand-red);
 }
 
 .app-card-thumb-wrapper {
@@ -2222,7 +2803,6 @@ img {
 
 .lifestyle-card:hover {
   border-color: var(--brand-red);
-  transform: translateY(-4px);
   box-shadow: 0 16px 32px -10px rgba(227, 18, 31, 0.25);
 }
 
@@ -2354,8 +2934,6 @@ img {
 .brand-tile:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: var(--brand-red);
-  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.4);
-  transform: translateY(-3px);
 }
 
 .brand-tile-monogram {

@@ -5,27 +5,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Brand Palette — Industrial / Automotive */
-  --brand-red: #e3121f;
-  --brand-red-dark: #b70e19;
-  --brand-red-light: #fdeceb;
-  --brand-black: #14161a;
-  --brand-charcoal: #1f2229;
-  --brand-yellow: #ffb800;
-  --brand-yellow-dark: #e0a000;
-  --brand-green: #1e8e3e;
-  --brand-green-light: #e8f7ec;
+  /* Brand Palette — Deep Blue + Amber
+     Canonical names. Prefer these in new code. */
+  --brand-primary: #1d4ed8;
+  --brand-primary-dark: #1e40af;
+  --brand-primary-light: #eef4ff;
+  --brand-accent: #f59e0b;
+  --brand-accent-dark: #d97f06;
+  --brand-ink: #0f172a;
+  --brand-ink-soft: #1e293b;
+  --brand-success: #059669;
+  --brand-success-light: #e7f6f0;
+  --brand-danger: #dc2626;
+  --brand-danger-light: #fdecec;
+
+  /* RGB channels for translucent shadows and focus rings */
+  --brand-primary-rgb: 29, 78, 216;
+  --brand-accent-rgb: 245, 158, 11;
+
+  /* Legacy names kept as aliases so existing rules keep working.
+     "red"/"yellow" here are historical labels, not the actual hues. */
+  --brand-red: var(--brand-primary);
+  --brand-red-dark: var(--brand-primary-dark);
+  --brand-red-light: var(--brand-primary-light);
+  --brand-black: var(--brand-ink);
+  --brand-charcoal: var(--brand-ink-soft);
+  --brand-yellow: var(--brand-accent);
+  --brand-yellow-dark: var(--brand-accent-dark);
+  --brand-green: var(--brand-success);
+  --brand-green-light: var(--brand-success-light);
   --brand-blue-steel: #2f6fa8;
 
-  /* Kept as aliases so existing component references stay valid */
-  --apple-blue: #e3121f;
-  --apple-blue-hover: #b70e19;
-  --apple-blue-light: #fdeceb;
-  --apple-cyan: #ffb800;
-  --apple-orange: #ffb800;
-  --apple-red: #e3121f;
-  --apple-green: #1e8e3e;
-  --apple-green-light: #e8f7ec;
+  --apple-blue: var(--brand-primary);
+  --apple-blue-hover: var(--brand-primary-dark);
+  --apple-blue-light: var(--brand-primary-light);
+  --apple-cyan: var(--brand-accent);
+  --apple-orange: var(--brand-accent);
+  --apple-red: var(--brand-danger);
+  --apple-green: var(--brand-success);
+  --apple-green-light: var(--brand-success-light);
   --apple-indigo: #2f6fa8;
 
   /* Surfaces */
@@ -52,7 +70,7 @@
   /* Shadows */
   --shadow-ios-card: 0 1px 2px rgba(15, 17, 20, 0.06), 0 2px 8px -2px rgba(15, 17, 20, 0.06);
   --shadow-ios-card-hover: 0 8px 20px -6px rgba(15, 17, 20, 0.16), 0 2px 8px -2px rgba(15, 17, 20, 0.08);
-  --shadow-ios-hero: 0 24px 48px -16px rgba(0, 0, 0, 0.4), 0 8px 20px -8px rgba(227, 18, 31, 0.18);
+  --shadow-ios-hero: 0 24px 48px -16px rgba(0, 0, 0, 0.4), 0 8px 20px -8px rgba(var(--brand-primary-rgb), 0.18);
   --shadow-ios-modal: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
 
   /* Geometry & Radius — sharper, technical, not soft/squircle */
@@ -112,6 +130,13 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Icons — lighter, uniform stroke for a more refined feel.
+   Applies to every Lucide icon; filled marks (star ratings, monograms)
+   set their own stroke inline and are unaffected. */
+svg.lucide {
+  stroke-width: 1.5;
 }
 
 .container {
@@ -278,7 +303,7 @@ img {
 .appstore-search-pill:focus-within {
   background: #ffffff;
   border-color: var(--brand-red);
-  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.12);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.12);
   width: 320px;
 }
 
@@ -394,7 +419,7 @@ img {
   border-radius: var(--radius-squircle-sm);
   padding: 0.55rem 0.85rem;
   gap: 0.5rem;
-  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.12);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.12);
 }
 
 .mobile-search-pill input {
@@ -509,7 +534,7 @@ img {
    Hero Promotional Carousel
    ========================================================================== */
 .hero-carousel {
-  padding: 1.25rem 0 0;
+  padding: 1.25rem 0 1.75rem;
   background: var(--ios-bg);
 }
 
@@ -1149,8 +1174,8 @@ img {
   height: 42px;
   flex-shrink: 0;
   border-radius: var(--radius-squircle-sm);
-  background: rgba(255, 184, 0, 0.12);
-  border: 1px solid rgba(255, 184, 0, 0.25);
+  background: rgba(var(--brand-accent-rgb), 0.12);
+  border: 1px solid rgba(var(--brand-accent-rgb), 0.25);
   color: var(--brand-yellow);
   display: flex;
   align-items: center;
@@ -1338,8 +1363,8 @@ img {
   width: 40px;
   height: 40px;
   border-radius: var(--radius-squircle-sm);
-  background: rgba(255, 184, 0, 0.1);
-  border: 1px solid rgba(255, 184, 0, 0.2);
+  background: rgba(var(--brand-accent-rgb), 0.1);
+  border: 1px solid rgba(var(--brand-accent-rgb), 0.2);
   color: var(--brand-yellow);
   display: flex;
   align-items: center;
@@ -1555,7 +1580,7 @@ img {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   transition: var(--spring-transition);
-  box-shadow: 0 4px 14px rgba(227, 18, 31, 0.35);
+  box-shadow: 0 4px 14px rgba(var(--brand-primary-rgb), 0.35);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -1651,7 +1676,7 @@ img {
 .ios-field-select:focus {
   border-color: var(--brand-red);
   background: #2a2e37;
-  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.2);
 }
 
 .ios-field-select:disabled {
@@ -1674,7 +1699,7 @@ img {
   justify-content: center;
   gap: 0.5rem;
   transition: var(--spring-transition);
-  box-shadow: 0 4px 14px rgba(227, 18, 31, 0.3);
+  box-shadow: 0 4px 14px rgba(var(--brand-primary-rgb), 0.3);
 }
 
 .btn-ios-apply-fitment:hover {
@@ -1768,7 +1793,7 @@ img {
   transition: var(--spring-transition);
   flex-shrink: 0;
   white-space: nowrap;
-  box-shadow: 0 3px 10px rgba(227, 18, 31, 0.28);
+  box-shadow: 0 3px 10px rgba(var(--brand-primary-rgb), 0.28);
 }
 
 .btn-app-get:hover {
@@ -1946,7 +1971,7 @@ img {
   gap: 0.35rem;
   background: var(--brand-red-light);
   color: var(--brand-red-dark);
-  border: 1px solid rgba(227, 18, 31, 0.25);
+  border: 1px solid rgba(var(--brand-primary-rgb), 0.25);
   padding: 0.35rem 0.7rem;
   border-radius: var(--radius-pill);
   font-size: 0.75rem;
@@ -2249,7 +2274,7 @@ img {
 .price-input-box:focus-within {
   border-color: var(--brand-red);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.1);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.1);
 }
 
 .price-input-box span {
@@ -2346,7 +2371,7 @@ img {
   text-transform: uppercase;
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-squircle-sm);
-  box-shadow: 0 2px 8px rgba(227, 18, 31, 0.3);
+  box-shadow: 0 2px 8px rgba(var(--brand-primary-rgb), 0.3);
 }
 
 .app-card-rank-pill {
@@ -3078,7 +3103,7 @@ img {
 
 .lifestyle-card:hover {
   border-color: var(--brand-red);
-  box-shadow: 0 16px 32px -10px rgba(227, 18, 31, 0.25);
+  box-shadow: 0 16px 32px -10px rgba(var(--brand-primary-rgb), 0.25);
 }
 
 .lifestyle-card-img {
@@ -3225,7 +3250,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(227, 18, 31, 0.3);
+  box-shadow: 0 4px 10px rgba(var(--brand-primary-rgb), 0.3);
 }
 
 .brand-tile-info {
@@ -3287,7 +3312,7 @@ img {
 
 .faq-item.active {
   border-color: var(--brand-red);
-  box-shadow: 0 0 0 3px rgba(227, 18, 31, 0.08), var(--shadow-ios-card);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.08), var(--shadow-ios-card);
 }
 
 .faq-question {

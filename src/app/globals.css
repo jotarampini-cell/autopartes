@@ -2621,96 +2621,162 @@ svg.lucide {
 }
 
 /* ==========================================================================
-   Category Tile Grid — dense "pick a department" block
+   Category Rails — one scrollable row per department
    ========================================================================== */
 .cattiles {
   padding: 1.5rem 0 0.5rem;
 }
 
-.cattiles-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
+.catrail {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--ios-separator-light);
 }
 
-.cattile {
-  background: var(--ios-bg-secondary);
-  border: 1px solid var(--ios-separator);
-  border-radius: var(--radius-squircle-sm);
-  padding: 1rem;
+.catrail:last-child {
+  border-bottom: none;
+}
+
+.catrail-header {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
 }
 
-.cattile-title {
+.catrail-title {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   font-weight: 800;
   text-transform: uppercase;
   color: var(--ios-label-primary);
   line-height: 1.15;
-  margin-bottom: 0.75rem;
 }
 
-.cattile-preview {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 0.85rem;
+.catrail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.cattile-cell {
+.catrail-link:hover {
+  text-decoration: underline;
+}
+
+.catrail-viewport {
+  position: relative;
+}
+
+.catrail-track {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.25rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.catrail-track::-webkit-scrollbar {
+  display: none;
+}
+
+.catrail-item {
+  flex: 0 0 168px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  padding: 0;
+  background: none;
+}
+
+.catrail-thumb {
+  display: block;
+  width: 100%;
   aspect-ratio: 1 / 1;
   background: var(--ios-bg-tertiary);
+  border: 1px solid var(--ios-separator);
   border-radius: var(--radius-squircle-sm);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
 }
 
-.cattile-cell img {
+.catrail-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cattile-cell:hover img {
+.catrail-item:hover .catrail-thumb img {
   transform: scale(1.06);
 }
 
-.cattile-link {
-  margin-top: auto;
-  text-align: left;
+.catrail-item:hover .catrail-thumb {
+  border-color: var(--brand-primary);
+}
+
+.catrail-name {
   font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--brand-primary);
-  min-height: 34px;
+  color: var(--ios-label-secondary);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.cattile-link:hover {
-  text-decoration: underline;
+.catrail-price {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ios-label-primary);
 }
 
-@media (max-width: 1024px) {
-  .cattiles-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.catrail-arrow {
+  position: absolute;
+  top: 34%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ios-bg-secondary);
+  color: var(--ios-label-primary);
+  border: 1px solid var(--ios-separator);
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+  transition: var(--fast-transition);
 }
 
-@media (max-width: 560px) {
-  .cattiles { padding: 1.5rem 0 0.5rem; }
-  /* One department per row with a 2x2 preview, so each image stays a
-     proper square instead of a flattened strip. */
-  .cattiles-grid { grid-template-columns: minmax(0, 1fr); gap: 0.85rem; }
-  .cattile { padding: 1rem; }
-  .cattile-title { font-size: 1.35rem; margin-bottom: 0.75rem; line-height: 1.15; }
-  .cattile-preview {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem;
-    margin-bottom: 0.85rem;
-  }
-  .cattile-link { font-size: 0.9375rem; min-height: 40px; }
+.catrail-arrow:hover {
+  background: var(--brand-primary);
+  color: #fff;
+  border-color: var(--brand-primary);
+}
+
+.catrail-arrow.prev { left: -12px; }
+.catrail-arrow.next { right: -12px; }
+
+@media (max-width: 640px) {
+  .cattiles { padding: 1rem 0 0.25rem; }
+  .catrail { padding: 1.1rem 0; }
+  .catrail-title { font-size: 1.35rem; }
+  .catrail-link { font-size: 0.9375rem; min-height: 40px; align-items: center; }
+  .catrail-track { gap: 0.75rem; }
+  .catrail-item { flex: 0 0 46vw; max-width: 200px; }
+  .catrail-name { font-size: 0.875rem; }
+  .catrail-price { font-size: 1.15rem; }
+  /* Touch scrolling replaces the arrows on phones */
+  .catrail-arrow { display: none; }
 }
 
 /* ==========================================================================
@@ -4524,6 +4590,26 @@ svg.lucide {
   box-shadow: 0 4px 10px rgba(var(--brand-primary-rgb), 0.3);
 }
 
+/* White plate so dark-inked logos stay legible on the dark section */
+.brand-tile-logo {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-squircle-sm);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.brand-tile-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 .brand-tile-info {
   min-width: 0;
   flex: 1;
@@ -4801,10 +4887,11 @@ svg.lucide {
     gap: 0.5rem;
     padding: 0.8rem;
   }
-  .brand-tile-monogram {
-    width: 36px;
-    height: 36px;
-    font-size: 0.95rem;
+  .brand-tile-monogram,
+  .brand-tile-logo {
+    width: 44px;
+    height: 44px;
+    font-size: 1.05rem;
   }
   .brand-tile-name {
     font-size: 0.9375rem;

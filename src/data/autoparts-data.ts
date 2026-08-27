@@ -52,7 +52,14 @@ export interface LifestyleSegment {
 
 export interface Brand {
   name: string;
+  /** Wordmark text, used as the accessible name and the fallback label. */
   logo: string;
+  /**
+   * Path to an official logo file under /public/brands (e.g. "/brands/bosch.svg").
+   * Optional: when absent, or if the file fails to load, the wall falls back
+   * to a monogram tile. Supply files you are licensed to use.
+   */
+  logoSrc?: string;
   country: string;
   desc: string;
 }

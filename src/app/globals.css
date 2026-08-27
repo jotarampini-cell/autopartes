@@ -2422,21 +2422,28 @@ svg.lucide {
 /* ==========================================================================
    Scroll reveal — sections ease in as they enter the viewport
    ========================================================================== */
+/* Visible by default. Only JS may hide it, by adding .reveal-armed once an
+   observer is actually watching — so a failed observer can never strand a
+   section at opacity 0. */
 .reveal {
-  opacity: 0;
-  transform: translateY(14px);
   transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
               transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(14px);
   will-change: opacity, transform;
 }
 
-.reveal.is-visible {
+.reveal-armed.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .reveal-armed {
     opacity: 1;
     transform: none;
     transition: none;

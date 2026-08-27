@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { Filter, PackageSearch, X, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Filter, PackageSearch, X, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PRODUCTS, BRANDS, CATEGORIES } from '@/data/autoparts-data';
 import { AppProductCard } from './AppProductCard';
 import { useGarage } from '@/context/GarageContext';
@@ -26,6 +26,7 @@ export const AppCatalogSection: React.FC<AppCatalogSectionProps> = ({
   const [maxPrice, setMaxPrice] = useState(500);
   const [sortBy, setSortBy] = useState('featured');
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   const toggleBrand = (b: string) => {
     setSelectedBrands(prev => {
@@ -69,6 +70,23 @@ export const AppCatalogSection: React.FC<AppCatalogSectionProps> = ({
 
     return list;
   }, [selectedCategory, selectedBrands, maxPrice, searchQuery, onlyCompatible, activeVehicle, checkFitment, sortBy]);
+
+  // Keep the home page short: show one page of results with the rest a
+  // click away, rather than dumping the whole catalog inline.
+  const PER_PAGE = 12;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const currentPage = Math.min(page, pageCount);
+  const pageItems = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+  // Any change to the result set sends the user back to the first page.
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory, selectedBrands, maxPrice, searchQuery, onlyCompatible, sortBy]);
+
+  const goToPage = (p: number) => {
+    setPage(Math.min(Math.max(1, p), pageCount));
+    document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const activeFilterCount =
     (selectedCategory !== 'all' ? 1 : 0) + selectedBrands.size + (onlyCompatible ? 1 : 0) + (maxPrice < 500 ? 1 : 0);
@@ -181,7 +199,10 @@ export const AppCatalogSection: React.FC<AppCatalogSectionProps> = ({
           <div>
             <h2 className="section-app-title">Catálogo Completo de Repuestos</h2>
             <p className="section-app-subtitle">
-              {filtered.length} repuestos disponibles {activeVehicle ? `para tu ${activeVehicle.make} ${activeVehicle.model}` : ''}
+              {filtered.length > 0
+                ? `${(currentPage - 1) * PER_PAGE + 1}-${Math.min(currentPage * PER_PAGE, filtered.length)} de ${filtered.length} repuestos`
+                : '0 repuestos'}
+              {activeVehicle ? ` para tu ${activeVehicle.make} ${activeVehicle.model}` : ''}
             </p>
           </div>
 
@@ -243,11 +264,48 @@ export const AppCatalogSection: React.FC<AppCatalogSectionProps> = ({
           {/* Grid */}
           <main>
             {filtered.length > 0 ? (
-              <div className="app-products-grid">
-                {filtered.map(p => (
-                  <AppProductCard key={p.id} product={p} />
-                ))}
-              </div>
+              <>
+                <div className="app-products-grid">
+                  {pageItems.map(p => (
+                    <AppProductCard key={p.id} product={p} />
+                  ))}
+                </div>
+
+                {pageCount > 1 && (
+                  <nav className="catalog-pager" aria-label="Paginación del catálogo">
+                    <button
+                      className="catalog-pager-arrow"
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      aria-label="Página anterior"
+                    >
+                      <ChevronLeft size={16} /> Anterior
+                    </button>
+
+                    <div className="catalog-pager-pages">
+                      {Array.from({ length: pageCount }).map((_, i) => (
+                        <button
+                          key={i}
+                          className={`catalog-pager-num ${currentPage === i + 1 ? 'is-current' : ''}`}
+                          onClick={() => goToPage(i + 1)}
+                          aria-current={currentPage === i + 1 ? 'page' : undefined}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      className="catalog-pager-arrow"
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage === pageCount}
+                      aria-label="Página siguiente"
+                    >
+                      Siguiente <ChevronRight size={16} />
+                    </button>
+                  </nav>
+                )}
+              </>
             ) : (
               <div
                 style={{

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle2, AlertTriangle, Star } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Star, Flame } from 'lucide-react';
 import { Product } from '@/data/autoparts-data';
 import { useGarage } from '@/context/GarageContext';
 import { useCart } from '@/context/CartContext';
@@ -11,16 +11,28 @@ interface AppProductCardProps {
   rank?: number;
 }
 
+/** Stock at or below this reads as scarce and is worth surfacing. */
+const LOW_STOCK_THRESHOLD = 10;
+
 export const AppProductCard: React.FC<AppProductCardProps> = ({ product, rank }) => {
   const { activeVehicle, checkFitment } = useGarage();
-  const { addToCart, setSelectedQuickViewProduct } = useCart();
+  const { addToCart, setSelectedQuickViewProduct, trackView } = useCart();
 
   const fitStatus = checkFitment(product);
+
+  const discountPct = product.originalPrice
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : 0;
+  const isLowStock = product.stock <= LOW_STOCK_THRESHOLD;
+  const isPopular = product.reviewsCount >= 150;
 
   return (
     <div
       className="app-product-card"
-      onClick={() => setSelectedQuickViewProduct(product)}
+      onClick={() => {
+        trackView(product);
+        setSelectedQuickViewProduct(product);
+      }}
       style={{ cursor: 'pointer' }}
     >
       <div className="app-card-thumb-wrapper">
@@ -29,6 +41,9 @@ export const AppProductCard: React.FC<AppProductCardProps> = ({ product, rank })
           <span className="app-card-rank-pill">#{rank}</span>
         ) : (
           product.badge && <span className="app-card-badge-pill">{product.badge}</span>
+        )}
+        {discountPct > 0 && (
+          <span className="app-card-discount-pill">-{discountPct}%</span>
         )}
       </div>
 
@@ -67,6 +82,21 @@ export const AppProductCard: React.FC<AppProductCardProps> = ({ product, rank })
           <span className="app-card-rating-value">{product.rating}</span>
           <span className="app-card-rating-count">({product.reviewsCount})</span>
         </div>
+
+        {(isPopular || isLowStock) && (
+          <div className="app-card-signals">
+            {isPopular && (
+              <span className="app-card-signal popular">
+                <Flame size={11} /> {product.reviewsCount}+ compras
+              </span>
+            )}
+            {isLowStock && (
+              <span className="app-card-signal low-stock">
+                Solo quedan {product.stock}
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="app-card-footer" onClick={e => e.stopPropagation()}>
           <div className="app-card-price-group">

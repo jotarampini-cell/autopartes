@@ -6,6 +6,7 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { ProductDetailSheet } from '@/components/ProductDetailSheet';
 import { GarageModal } from '@/components/GarageModal';
 import { ToastNotification } from '@/components/ToastNotification';
+import { AddedToCartPanel } from '@/components/AddedToCartPanel';
 import { Footer } from '@/components/Footer';
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function RootLayout({
             <ProductDetailSheet />
             <GarageModal />
             <ToastNotification />
+            <AddedToCartPanel />
             <Footer />
           </CartProvider>
         </GarageProvider>

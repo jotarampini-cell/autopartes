@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { PRODUCTS, Product } from '@/data/autoparts-data';
 
 export interface CartItem {
@@ -24,6 +24,11 @@ interface CartContextType {
   setSelectedQuickViewProduct: (p: Product | null) => void;
   toastMessage: { text: string; type: 'success' | 'info' | 'warning' } | null;
   showToast: (text: string, type?: 'success' | 'info' | 'warning') => void;
+  /** Last item added, used for the inline confirmation panel. */
+  lastAdded: Product | null;
+  dismissLastAdded: () => void;
+  recentlyViewed: Product[];
+  trackView: (p: Product) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -33,6 +38,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedQuickViewProduct, setSelectedQuickViewProduct] = useState<Product | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'info' | 'warning' } | null>(null);
+  const [lastAdded, setLastAdded] = useState<Product | null>(null);
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     try {
@@ -40,10 +48,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (storedCart) {
         setCart(JSON.parse(storedCart));
       }
+      const storedViews = localStorage.getItem('haztap_recently_viewed');
+      if (storedViews) {
+        const ids: string[] = JSON.parse(storedViews);
+        setRecentlyViewed(
+          ids.map(id => PRODUCTS.find(p => p.id === id)).filter((p): p is Product => !!p)
+        );
+      }
     } catch {
       // Ignore during SSR
     }
   }, []);
+
+  useEffect(() => () => {
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+  }, []);
+
+  const trackView = (p: Product) => {
+    setRecentlyViewed(prev => {
+      const updated = [p, ...prev.filter(item => item.id !== p.id)].slice(0, 8);
+      localStorage.setItem('haztap_recently_viewed', JSON.stringify(updated.map(i => i.id)));
+      return updated;
+    });
+  };
+
+  const dismissLastAdded = () => {
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    setLastAdded(null);
+  };
 
   const showToast = (text: string, type: 'success' | 'info' | 'warning' = 'info') => {
     setToastMessage({ text, type });
@@ -65,8 +97,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem('haztap_cart', JSON.stringify(updated));
       return updated;
     });
-    setIsCartOpen(true);
-    showToast('Repuesto añadido al carrito con éxito', 'success');
+
+    // Confirm inline instead of yanking the user into the cart drawer.
+    const product = PRODUCTS.find(p => p.id === productId) || null;
+    setLastAdded(product);
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setLastAdded(null), 5000);
   };
 
   const updateQuantity = (productId: string, qty: number) => {
@@ -124,6 +160,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setSelectedQuickViewProduct,
         toastMessage,
         showToast,
+        lastAdded,
+        dismissLastAdded,
+        recentlyViewed,
+        trackView,
       }}
     >
       {children}

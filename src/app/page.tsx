@@ -8,6 +8,8 @@ import { VehicleFitmentStrip } from '@/components/VehicleFitmentStrip';
 import { TrustBar } from '@/components/TrustBar';
 import { FeaturedProductsGrid } from '@/components/FeaturedProductsGrid';
 import { AppCatalogSection } from '@/components/AppCatalogSection';
+import { RecentlyViewed } from '@/components/RecentlyViewed';
+import { ScrollReveal } from '@/components/ScrollReveal';
 import { BrandWall } from '@/components/BrandWall';
 import { PopularLinksSection } from '@/components/PopularLinksSection';
 import { NewsletterSignup } from '@/components/NewsletterSignup';
@@ -61,26 +63,43 @@ export default function HomePage() {
       <TrustBar />
 
       {/* 5. Featured product grid */}
-      <FeaturedProductsGrid onSeeAll={handleExploreCatalog} />
+      <ScrollReveal>
+        <FeaturedProductsGrid onSeeAll={handleExploreCatalog} />
+      </ScrollReveal>
 
       {/* 6. Full catalog with filters */}
-      <AppCatalogSection
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        searchQuery={searchQuery}
-      />
+      <ScrollReveal>
+        <AppCatalogSection
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          searchQuery={searchQuery}
+        />
+      </ScrollReveal>
 
-      {/* 7. Certified brands */}
-      <BrandWall />
+      {/* 7. Recently viewed — appears once the shopper has browsed */}
+      <ScrollReveal>
+        <RecentlyViewed />
+      </ScrollReveal>
 
-      {/* 8. Popular link columns */}
-      <PopularLinksSection onSelectCategory={handleCategorySelect} />
+      {/* 8. Certified brands */}
+      <ScrollReveal>
+        <BrandWall />
+      </ScrollReveal>
 
-      {/* 9. FAQ */}
-      <FaqAccordion />
+      {/* 9. Popular link columns */}
+      <ScrollReveal>
+        <PopularLinksSection onSelectCategory={handleCategorySelect} />
+      </ScrollReveal>
 
-      {/* 10. Newsletter */}
-      <NewsletterSignup />
+      {/* 10. FAQ */}
+      <ScrollReveal>
+        <FaqAccordion />
+      </ScrollReveal>
+
+      {/* 11. Newsletter */}
+      <ScrollReveal>
+        <NewsletterSignup />
+      </ScrollReveal>
     </main>
   );
 }

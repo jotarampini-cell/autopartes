@@ -636,6 +636,34 @@ export const FAQS: FaqItem[] = [
   }
 ];
 
+/**
+ * Categories a mechanic would naturally service together, used to suggest
+ * companion parts. Falls back to same-category items when no pairing exists.
+ */
+const COMPANION_CATEGORIES: Record<string, string[]> = {
+  frenos: ["frenos", "suspension"],
+  motor: ["filtros", "motor"],
+  filtros: ["motor", "filtros"],
+  suspension: ["frenos", "suspension"],
+  electrico: ["iluminacion", "motor"],
+  refrigeracion: ["motor", "filtros"],
+  escape: ["motor", "filtros"],
+  iluminacion: ["electrico", "filtros"],
+};
+
+/** Companion parts for a product, cheapest first so add-ons feel easy. */
+export function getFrequentlyBoughtWith(product: Product, limit = 2): Product[] {
+  const preferred = COMPANION_CATEGORIES[product.category] || [product.category];
+  const scored = PRODUCTS.filter(p => p.id !== product.id)
+    .map(p => {
+      const rank = preferred.indexOf(p.category);
+      return { p, rank: rank === -1 ? preferred.length : rank };
+    })
+    .sort((a, b) => a.rank - b.rank || a.p.price - b.p.price);
+
+  return scored.slice(0, limit).map(s => s.p);
+}
+
 export const PROMO_SLIDES: PromoSlide[] = [
   {
     id: "promo-frenos",

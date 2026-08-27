@@ -4,6 +4,7 @@ import React from 'react';
 import { X, Star, ShieldCheck, Truck, Wrench, CheckCircle2, AlertTriangle, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useGarage } from '@/context/GarageContext';
+import { FrequentlyBoughtTogether } from './FrequentlyBoughtTogether';
 
 export const ProductDetailSheet: React.FC = () => {
   const { selectedQuickViewProduct, setSelectedQuickViewProduct, addToCart } = useCart();
@@ -148,6 +149,8 @@ export const ProductDetailSheet: React.FC = () => {
               </div>
             ))}
           </div>
+
+          <FrequentlyBoughtTogether product={product} />
 
           <div
             style={{

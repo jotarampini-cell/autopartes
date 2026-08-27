@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PROMO_SLIDES } from '@/data/autoparts-data';
 
@@ -25,7 +25,33 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onSelectCategory }) 
     return () => clearTimeout(timer);
   }, [index, isPaused, next]);
 
-  const slide = PROMO_SLIDES[index];
+  // Touch swipe: horizontal drags past the threshold change slides.
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const SWIPE_THRESHOLD = 45;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const startX = touchStartX.current;
+    const startY = touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    setIsPaused(false);
+    if (startX === null || startY === null) return;
+
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    // Ignore mostly-vertical drags so page scrolling still works.
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) next();
+    else prev();
+  };
 
   return (
     <section
@@ -36,7 +62,11 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onSelectCategory }) 
       aria-label="Promociones destacadas"
     >
       <div className="container">
-        <div className="hero-carousel-frame">
+        <div
+          className="hero-carousel-frame"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {PROMO_SLIDES.map((s, i) => (
             <div
               key={s.id}

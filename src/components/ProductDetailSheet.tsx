@@ -1,191 +1,278 @@
 'use client';
 
-import React from 'react';
-import { X, Star, ShieldCheck, Truck, Wrench, CheckCircle2, AlertTriangle, ShoppingBag } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  X, Star, ShieldCheck, Truck, CheckCircle2, AlertTriangle,
+  RotateCcw, Lock, ChevronRight,
+} from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useGarage } from '@/context/GarageContext';
+import { getRatingBreakdown, getHighlights } from '@/data/autoparts-data';
 import { FrequentlyBoughtTogether } from './FrequentlyBoughtTogether';
 
-export const ProductDetailSheet: React.FC = () => {
-  const { selectedQuickViewProduct, setSelectedQuickViewProduct, addToCart } = useCart();
-  const { activeVehicle, checkFitment } = useGarage();
+/** Stock at or below this is called out as limited. */
+const LOW_STOCK = 10;
 
-  if (!selectedQuickViewProduct) return null;
+const StarRow: React.FC<{ rating: number; size?: number }> = ({ rating, size = 14 }) => (
+  <span className="pdp-stars">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <Star
+        key={i}
+        size={size}
+        fill={i < Math.round(rating) ? 'currentColor' : 'none'}
+        strokeWidth={i < Math.round(rating) ? 0 : 1.5}
+      />
+    ))}
+  </span>
+);
+
+export const ProductDetailSheet: React.FC = () => {
+  const { selectedQuickViewProduct, setSelectedQuickViewProduct, addToCart, setIsCartOpen } = useCart();
+  const { activeVehicle, checkFitment } = useGarage();
+  const [qty, setQty] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
 
   const product = selectedQuickViewProduct;
-  const fitStatus = checkFitment(product);
 
-  const handleAddToCart = () => {
-    addToCart(product.id);
+  // Reset per-product UI state whenever a different product opens.
+  useEffect(() => {
+    setQty(1);
+    setActiveImage(0);
+  }, [product?.id]);
+
+  // Close on Escape, matching the backdrop click.
+  useEffect(() => {
+    if (!product) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedQuickViewProduct(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [product, setSelectedQuickViewProduct]);
+
+  if (!product) return null;
+
+  const fitStatus = checkFitment(product);
+  const breakdown = getRatingBreakdown(product);
+  const highlights = getHighlights(product);
+  const discountPct = product.originalPrice
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : 0;
+  const savings = product.originalPrice ? product.originalPrice - product.price : 0;
+
+  // The catalog carries a single photo per part, so the gallery shows real
+  // crops of it rather than filtered copies pretending to be other angles.
+  // Each variant needs an explicit height, otherwise the crop is ignored
+  // and the CDN returns the identical file.
+  const baseImg = product.image.split('?')[0];
+  const gallery = [
+    `${baseImg}?auto=format&fit=crop&w=800&h=800&q=80&crop=entropy`,
+    `${baseImg}?auto=format&fit=crop&w=800&h=800&q=80&crop=top`,
+    `${baseImg}?auto=format&fit=crop&w=800&h=800&q=80&crop=bottom`,
+  ];
+
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 2);
+  const deliveryLabel = deliveryDate.toLocaleDateString('es-MX', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+
+  const handleAdd = () => {
+    addToCart(product.id, qty);
     setSelectedQuickViewProduct(null);
   };
 
+  const handleBuyNow = () => {
+    addToCart(product.id, qty);
+    setSelectedQuickViewProduct(null);
+    setIsCartOpen(true);
+  };
+
   return (
-    <div
-      className="appstore-sheet-backdrop"
-      onClick={() => setSelectedQuickViewProduct(null)}
-    >
+    <div className="pdp-backdrop" onClick={() => setSelectedQuickViewProduct(null)}>
       <div
-        className="appstore-detail-modal"
+        className="pdp-modal"
         onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={product.name}
       >
         <button
-          className="modal-close-btn"
+          className="pdp-close"
           onClick={() => setSelectedQuickViewProduct(null)}
-          title="Cerrar"
+          aria-label="Cerrar"
         >
           <X size={18} />
         </button>
 
-        {/* App Store Header Hero */}
-        <div className="appstore-modal-header-hero">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="appstore-modal-app-icon"
-          />
-          <div className="appstore-modal-meta">
-            <span className="appstore-modal-brand">{product.brand}</span>
-            <h2 className="appstore-modal-title">{product.name}</h2>
-            <div className="appstore-modal-subtitle">
-              OEM: {product.oemNumber} · {product.category.toUpperCase()}
+        <div className="pdp-body">
+          {/* ---- Gallery ---- */}
+          <div className="pdp-gallery">
+            <div className="pdp-thumbs">
+              {gallery.map((src, i) => (
+                <button
+                  key={i}
+                  className={`pdp-thumb ${i === activeImage ? 'is-active' : ''}`}
+                  onMouseEnter={() => setActiveImage(i)}
+                  onClick={() => setActiveImage(i)}
+                  aria-label={`Imagen ${i + 1}`}
+                >
+                  <img src={src} alt="" />
+                </button>
+              ))}
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <button className="appstore-get-btn" onClick={handleAddToCart}>
-                <ShoppingBag size={14} /> AGREGAR · ${product.price.toFixed(2)}
-              </button>
+            <div className="pdp-main-image">
+              <img src={gallery[activeImage]} alt={product.name} />
+              {discountPct > 0 && <span className="pdp-deal-flag">-{discountPct}%</span>}
             </div>
           </div>
-        </div>
 
-        {/* App Store Quick Stat Bar */}
-        <div className="appstore-stat-bar">
-          <div className="appstore-stat-item">
-            <span className="appstore-stat-val">
-              {product.rating} <Star size={14} fill="var(--apple-orange)" stroke="var(--apple-orange)" />
-            </span>
-            <span className="appstore-stat-label">{product.reviewsCount} Valoraciones</span>
-          </div>
+          {/* ---- Center column ---- */}
+          <div className="pdp-info">
+            <span className="pdp-brand">{product.brand}</span>
+            <h2 className="pdp-title">{product.name}</h2>
 
-          <div className="appstore-stat-item">
-            <span className="appstore-stat-val" style={{ color: 'var(--apple-blue)' }}>
-              #1
-            </span>
-            <span className="appstore-stat-label">En su Categoría</span>
-          </div>
+            <a className="pdp-rating-link" href="#pdp-reviews">
+              <StarRow rating={product.rating} />
+              <strong>{product.rating}</strong>
+              <span>{product.reviewsCount} calificaciones</span>
+            </a>
 
-          <div className="appstore-stat-item">
-            <span className="appstore-stat-val" style={{ color: 'var(--apple-green)' }}>
-              <ShieldCheck size={18} />
-            </span>
-            <span className="appstore-stat-label">Garantía OEM</span>
-          </div>
+            <div className="pdp-oem">OEM: {product.oemNumber}</div>
 
-          <div className="appstore-stat-item">
-            <span className="appstore-stat-val" style={{ color: 'var(--apple-cyan)' }}>
-              <Truck size={18} />
-            </span>
-            <span className="appstore-stat-label">Envío 24-48h</span>
-          </div>
-        </div>
-
-        {/* Modal Body */}
-        <div className="appstore-modal-body">
-          {/* Fitment Alert Banner */}
-          {activeVehicle && (
-            fitStatus === 'compatible' ? (
-              <div
-                style={{
-                  background: 'var(--apple-green-light)',
-                  color: '#065f46',
-                  padding: '0.85rem 1.25rem',
-                  borderRadius: 'var(--radius-squircle-md)',
-                  marginBottom: '1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.6rem',
-                  fontWeight: 700,
-                  fontSize: '0.875rem',
-                }}
-              >
-                <CheckCircle2 size={18} />
-                <span>
-                  Ajuste 100% Garantizado para tu {activeVehicle.year} {activeVehicle.make} {activeVehicle.model} ({activeVehicle.engine})
+            <div className="pdp-price-block">
+              {discountPct > 0 && <span className="pdp-price-off">-{discountPct}%</span>}
+              <span className="pdp-price">${product.price.toFixed(2)}</span>
+              {product.originalPrice && (
+                <span className="pdp-price-was">
+                  Antes: <s>${product.originalPrice.toFixed(2)}</s>
                 </span>
-              </div>
-            ) : (
-              <div
-                style={{
-                  background: '#fff1f0',
-                  color: 'var(--apple-red)',
-                  padding: '0.85rem 1.25rem',
-                  borderRadius: 'var(--radius-squircle-md)',
-                  marginBottom: '1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.6rem',
-                  fontWeight: 700,
-                  fontSize: '0.875rem',
-                }}
-              >
-                <AlertTriangle size={18} />
-                <span>Esta pieza no calza con tu vehículo actual. Consulta con soporte.</span>
-              </div>
-            )
-          )}
+              )}
+            </div>
+            {savings > 0 && (
+              <div className="pdp-savings">Ahorras ${savings.toFixed(2)}</div>
+            )}
 
-          <h4 className="appstore-section-label">Descripción &amp; Novedades</h4>
-          <p style={{ color: '#475569', fontSize: '0.9375rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
-            {product.shortDesc}
-          </p>
+            {/* Fitment verdict, only once a vehicle is set */}
+            {activeVehicle && (
+              fitStatus === 'compatible' ? (
+                <div className="pdp-fit ok">
+                  <CheckCircle2 size={17} />
+                  <span>
+                    Compatible con tu <strong>{activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</strong>
+                  </span>
+                </div>
+              ) : (
+                <div className="pdp-fit bad">
+                  <AlertTriangle size={17} />
+                  <span>No compatible con tu {activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</span>
+                </div>
+              )
+            )}
 
-          <h4 className="appstore-section-label">Especificaciones Técnicas</h4>
-          <div className="appstore-spec-grid">
-            {Object.entries(product.specs || {}).map(([key, val]) => (
-              <div key={key} className="appstore-spec-pill">
-                <strong>{key}</strong>
-                <span>{val}</span>
-              </div>
-            ))}
+            <h3 className="pdp-section-label">Acerca de este artículo</h3>
+            <ul className="pdp-highlights">
+              {highlights.map((h, i) => (
+                <li key={i}>{h}</li>
+              ))}
+            </ul>
+
+            <h3 className="pdp-section-label">Especificaciones técnicas</h3>
+            <table className="pdp-spec-table">
+              <tbody>
+                {Object.entries(product.specs || {}).map(([key, val]) => (
+                  <tr key={key}>
+                    <th scope="row">{key}</th>
+                    <td>{val}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
+          {/* ---- Buy box ---- */}
+          <aside className="pdp-buybox">
+            <div className="pdp-buybox-price">${product.price.toFixed(2)}</div>
+
+            <div className="pdp-delivery">
+              <Truck size={15} />
+              <span>
+                Entrega <strong>{deliveryLabel}</strong> en pedidos superiores a $99
+              </span>
+            </div>
+
+            <div className={`pdp-stock ${product.stock <= LOW_STOCK ? 'low' : ''}`}>
+              {product.stock > 0
+                ? product.stock <= LOW_STOCK
+                  ? `¡Solo quedan ${product.stock}!`
+                  : 'En stock'
+                : 'Agotado'}
+            </div>
+
+            <label className="pdp-qty">
+              <span>Cantidad:</span>
+              <select value={qty} onChange={e => setQty(Number(e.target.value))}>
+                {Array.from({ length: Math.min(10, Math.max(1, product.stock)) }).map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </label>
+
+            <button className="pdp-add-btn" onClick={handleAdd} disabled={product.stock === 0}>
+              Agregar al carrito
+            </button>
+            <button className="pdp-buy-btn" onClick={handleBuyNow} disabled={product.stock === 0}>
+              Comprar ahora
+            </button>
+
+            <ul className="pdp-assurances">
+              <li><Lock size={13} /> Transacción segura</li>
+              <li><RotateCcw size={13} /> Devolución gratis en 30 días</li>
+              <li><ShieldCheck size={13} /> Garantía de ajuste Haztap</li>
+            </ul>
+          </aside>
+        </div>
+
+        {/* ---- Bundle ---- */}
+        <div className="pdp-lower">
           <FrequentlyBoughtTogether product={product} />
 
-          <div
-            style={{
-              marginTop: '2rem',
-              padding: '1.25rem',
-              background: '#fbfbfd',
-              borderRadius: 'var(--radius-squircle-md)',
-              border: '1px solid var(--ios-separator)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-            }}
-          >
-            <Wrench size={24} color="var(--apple-blue)" />
-            <div style={{ fontSize: '0.8125rem', color: '#6e6e73' }}>
-              <strong>Instalación Certificada:</strong> Recomendamos la instalación en talleres asociados a Haztap o mecánicos certificados para validar la garantía oficial del fabricante.
-            </div>
-          </div>
-        </div>
+          {/* ---- Reviews ---- */}
+          <div className="pdp-reviews" id="pdp-reviews">
+            <h3 className="pdp-section-label">Opiniones de clientes</h3>
+            <div className="pdp-reviews-grid">
+              <div className="pdp-reviews-summary">
+                <div className="pdp-reviews-score">
+                  <StarRow rating={product.rating} size={18} />
+                  <div className="pdp-reviews-avg">{product.rating} de 5</div>
+                  <div className="pdp-reviews-count">{product.reviewsCount} calificaciones globales</div>
+                </div>
 
-        {/* Sticky Footer Action */}
-        <div className="appstore-modal-sticky-footer-wrap">
-          <div className="fitment-guarantee-line">
-            <ShieldCheck size={13} /> Garantía de compatibilidad: cambio o devolución gratis si no encaja
-          </div>
-          <div className="appstore-modal-sticky-footer">
-            <div>
-              <div style={{ fontSize: '0.75rem', color: '#86868b' }}>Precio con IVA incluido</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--ios-label-primary)' }}>
-                ${product.price.toFixed(2)}
+                <div className="pdp-bars">
+                  {breakdown.map(b => (
+                    <div className="pdp-bar-row" key={b.stars}>
+                      <span className="pdp-bar-label">{b.stars} estrellas</span>
+                      <span className="pdp-bar-track">
+                        <span className="pdp-bar-fill" style={{ width: `${b.pct}%` }} />
+                      </span>
+                      <span className="pdp-bar-pct">{b.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pdp-reviews-note">
+                <p>
+                  Las opiniones provienen de compradores verificados que adquirieron esta
+                  refacción en Haztap.
+                </p>
+                <button className="pdp-reviews-cta" onClick={() => setSelectedQuickViewProduct(null)}>
+                  Seguir explorando el catálogo <ChevronRight size={14} />
+                </button>
               </div>
             </div>
-            <button className="appstore-get-btn" onClick={handleAddToCart} style={{ padding: '0.75rem 2rem' }}>
-              AGREGAR AL CARRITO
-            </button>
           </div>
         </div>
       </div>

@@ -1645,6 +1645,48 @@ export const FAQS: FaqItem[] = [
   }
 ];
 
+export interface RatingBreakdown {
+  stars: number;
+  count: number;
+  pct: number;
+}
+
+/**
+ * Star distribution implied by a product's average rating and review count.
+ * Derived rather than stored so it always agrees with the numbers shown.
+ */
+export function getRatingBreakdown(product: Product): RatingBreakdown[] {
+  const { rating, reviewsCount } = product;
+  // Weight each star bucket by how close it sits to the average, which
+  // yields the top-heavy curve typical of real review distributions.
+  const weights = [5, 4, 3, 2, 1].map(s => 1 / (1 + Math.pow(Math.abs(s - rating), 2.6)));
+  const sum = weights.reduce((a, b) => a + b, 0);
+
+  const raw = weights.map(w => (w / sum) * reviewsCount);
+  const counts = raw.map(Math.floor);
+  // Hand any rounding remainder to the largest bucket so totals match exactly.
+  let remainder = reviewsCount - counts.reduce((a, b) => a + b, 0);
+  while (remainder > 0) {
+    const idx = raw.indexOf(Math.max(...raw.map((v, i) => (counts[i] < Math.ceil(v) ? v : -1))));
+    counts[idx >= 0 ? idx : 0] += 1;
+    remainder -= 1;
+  }
+
+  return [5, 4, 3, 2, 1].map((stars, i) => ({
+    stars,
+    count: counts[i],
+    pct: reviewsCount ? Math.round((counts[i] / reviewsCount) * 100) : 0,
+  }));
+}
+
+/** Short selling points built from the product's own description and specs. */
+export function getHighlights(product: Product): string[] {
+  const specHighlights = Object.entries(product.specs || {})
+    .slice(0, 3)
+    .map(([key, val]) => `${key}: ${val}`);
+  return [product.shortDesc, ...specHighlights];
+}
+
 /**
  * Categories a mechanic would naturally service together, used to suggest
  * companion parts. Falls back to same-category items when no pairing exists.

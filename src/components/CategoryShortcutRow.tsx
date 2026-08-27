@@ -45,7 +45,10 @@ export const CategoryShortcutRow: React.FC<CategoryShortcutRowProps> = ({ onSele
                 <span className="shortcut-icon">
                   <Icon size={26} />
                 </span>
-                <span className="shortcut-label">{cat.name}</span>
+                <span className="shortcut-label shortcut-label-full">{cat.name}</span>
+                <span className="shortcut-label shortcut-label-short">
+                  {cat.shortName || cat.name}
+                </span>
                 <span className="shortcut-cta">Ver todo</span>
               </button>
             );

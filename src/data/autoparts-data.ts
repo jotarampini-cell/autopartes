@@ -33,6 +33,8 @@ export interface Product {
 export interface Category {
   id: string;
   name: string;
+  /** Condensed label for narrow mobile shortcut tiles. */
+  shortName?: string;
   icon: string;
   description: string;
   image: string;
@@ -139,6 +141,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "frenos",
     name: "Frenos y Rotores",
+    shortName: "Frenos",
     icon: "disc",
     description: "Discos ventilados, pastillas cerámicas, cálipers y líquido DOT4",
     image: "https://images.unsplash.com/photo-1613214150384-14921ff659b2?auto=format&fit=crop&w=600&q=80",
@@ -147,6 +150,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "motor",
     name: "Motor y Componentes",
+    shortName: "Motor",
     icon: "cog",
     description: "Kits de distribución, bujías de iridio, bobinas, juntas y sensores",
     image: "https://images.unsplash.com/photo-1606577924006-27d39b132ae2?auto=format&fit=crop&w=600&q=80",
@@ -155,6 +159,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "suspension",
     name: "Suspensión y Dirección",
+    shortName: "Suspensión",
     icon: "activity",
     description: "Amortiguadores a gas, espirales, brazos de control y terminales",
     image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80",
@@ -163,6 +168,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "escape",
     name: "Escape y Rendimiento",
+    shortName: "Escape",
     icon: "wind",
     description: "Silenciadores deportivos, catalizadores de alto flujo y resonadores",
     image: "https://images.unsplash.com/photo-1556744197-d16436cf529e?auto=format&fit=crop&w=600&q=80",
@@ -171,6 +177,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "electrico",
     name: "Sistema Eléctrico y Baterías",
+    shortName: "Baterías",
     icon: "zap",
     description: "Alternadores heavy duty, motores de arranque y baterías AGM",
     image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=600&q=80",
@@ -179,6 +186,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "refrigeracion",
     name: "Refrigeración y Clima",
+    shortName: "Clima",
     icon: "thermometer-snowflake",
     description: "Radiadores de aluminio, bombas de agua, termostatos y condensadores",
     image: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=600&q=80",
@@ -187,6 +195,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "filtros",
     name: "Filtros y Mantenimiento",
+    shortName: "Filtros",
     icon: "filter",
     description: "Filtros de aire de alto flujo, filtros de aceite sintético y cabina",
     image: "https://images.unsplash.com/photo-1577762616603-0be18aaca637?auto=format&fit=crop&w=600&q=80",
@@ -195,6 +204,7 @@ export const CATEGORIES: Category[] = [
   {
     id: "iluminacion",
     name: "Iluminación LED y Ópticas",
+    shortName: "Luces LED",
     icon: "sun",
     description: "Faros principales LED/Laser, barras auxiliares off-road y pilotos traseros",
     image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80",

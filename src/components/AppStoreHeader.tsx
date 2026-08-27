@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Gauge, Search, Car, ShoppingBag, Sparkles, Layers, Award, Tag, Phone, Truck, MapPin, Menu, X, ChevronDown, Plus } from 'lucide-react';
+import { Gauge, Search, Car, ShoppingBag, Sparkles, Layers, Award, Tag, Phone, Truck, MapPin, Menu, X, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useGarage } from '@/context/GarageContext';
 import { PRODUCTS, Product } from '@/data/autoparts-data';
@@ -274,30 +274,18 @@ export const AppStoreHeader: React.FC<AppStoreHeaderProps> = ({
         </div>
       )}
 
-      {/* Persistent Vehicle Bar (mobile) — keeps fitment context always visible */}
-      {!isMobileSearchOpen && (
+      {/* Persistent Vehicle Bar (mobile) — only once a vehicle is set. Without
+          one it just repeated the fitment strip's prompt while permanently
+          eating sticky viewport space. */}
+      {!isMobileSearchOpen && activeVehicle && (
         <button className="vehicle-bar" onClick={() => setIsGarageModalOpen(true)}>
-          {activeVehicle ? (
-            <>
-              <span className="vehicle-bar-icon active">
-                <Car size={13} />
-              </span>
-              <span className="vehicle-bar-text">
-                <strong>{activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</strong>
-              </span>
-              <ChevronDown size={14} className="vehicle-bar-chevron" />
-            </>
-          ) : (
-            <>
-              <span className="vehicle-bar-icon">
-                <Plus size={13} />
-              </span>
-              <span className="vehicle-bar-text">
-                <strong>Selecciona tu vehículo</strong> para ver piezas compatibles
-              </span>
-              <ChevronDown size={14} className="vehicle-bar-chevron" />
-            </>
-          )}
+          <span className="vehicle-bar-icon active">
+            <Car size={13} />
+          </span>
+          <span className="vehicle-bar-text">
+            <strong>{activeVehicle.year} {activeVehicle.make} {activeVehicle.model}</strong>
+          </span>
+          <ChevronDown size={14} className="vehicle-bar-chevron" />
         </button>
       )}
 
